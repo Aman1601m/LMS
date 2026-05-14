@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { CheckCircle, Clock, BookOpen, Send } from 'lucide-react';
 import { courses as defaultCourses } from '../data/constants';
 import Loader from '../components/Loader';
+import API_BASE_URL from '../config/api';
+
 
 export default function CourseDetails({ showToast }) {
   const { slug } = useParams();
@@ -23,7 +25,7 @@ export default function CourseDetails({ showToast }) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000);
         
-        const res = await fetch('/api/courses', { signal: controller.signal });
+        const res = await fetch(`${API_BASE_URL}/courses`, { signal: controller.signal });
         clearTimeout(timeoutId);
         
         if (res.ok) {
@@ -62,7 +64,7 @@ export default function CourseDetails({ showToast }) {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch('/api/leads', {
+      const res = await fetch(`${API_BASE_URL}/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
