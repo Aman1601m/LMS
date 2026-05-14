@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Trash2, Plus, LogOut, Search, Edit2, BarChart2, Users, BookOpen, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Skeleton from '../components/Skeleton';
+import API_BASE_URL from '../config/api';
+
 
 export default function Admin({ showToast }) {
   const [activeTab, setActiveTab] = useState('leads');
@@ -21,7 +23,7 @@ export default function Admin({ showToast }) {
     const formDataUpload = new FormData();
     formDataUpload.append('image', file);
     try {
-      const res = await fetch('http://localhost:5000/api/upload', {
+      const res = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
         body: formDataUpload
       });
@@ -50,10 +52,10 @@ export default function Admin({ showToast }) {
     const headers = { Authorization: `Bearer ${token}` };
     try {
       const [leadsRes, coursesRes, testRes, placedRes] = await Promise.all([
-        fetch('http://localhost:5000/api/leads', { headers }),
-        fetch('http://localhost:5000/api/courses', { headers }),
-        fetch('http://localhost:5000/api/testimonials', { headers }),
-        fetch('http://localhost:5000/api/placed-students', { headers })
+        fetch(`${API_BASE_URL}/leads`, { headers }),
+        fetch(`${API_BASE_URL}/courses`, { headers }),
+        fetch(`${API_BASE_URL}/testimonials`, { headers }),
+        fetch(`${API_BASE_URL}/placed-students`, { headers })
       ]);
       
       const [leads, courses, testimonials, placed] = await Promise.all([
@@ -71,7 +73,7 @@ export default function Admin({ showToast }) {
     if (!window.confirm('Are you sure you want to delete this?')) return;
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/${endpoint}/${id}`, { 
+      const res = await fetch(`${API_BASE_URL}/${endpoint}/${id}`, { 
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -93,7 +95,7 @@ export default function Admin({ showToast }) {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     const endpoint = activeTab === 'placed' ? 'placed-students' : activeTab;
-    const url = editId ? `http://localhost:5000/api/${endpoint}/${editId}` : `http://localhost:5000/api/${endpoint}`;
+    const url = editId ? `${API_BASE_URL}/${endpoint}/${editId}` : `${API_BASE_URL}/${endpoint}`;
     const method = editId ? 'PUT' : 'POST';
     const token = localStorage.getItem('token');
     
@@ -126,7 +128,7 @@ export default function Admin({ showToast }) {
   const handleUpdateLeadStatus = async (id, status) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/leads/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/leads/${id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',

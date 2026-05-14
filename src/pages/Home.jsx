@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle, Code, Star, Target, LineChart, Terminal, Shield, Database, Cpu, Globe, Box, GitBranch } from 'lucide-react';
 import Skeleton from '../components/Skeleton';
 import { courses as defaultCourses, stats, testimonials as defaultTestimonials, goals } from '../data/constants';
+import API_BASE_URL from '../config/api';
 
 const iconMap = {
   Code: <Code className="w-6 h-6" />,
@@ -25,9 +26,9 @@ export default function Home({ setIsModalOpen, showToast }) {
       setLoading(true);
       try {
         const [courseRes, testRes, placedRes] = await Promise.all([
-          fetch('http://localhost:5000/api/courses'),
-          fetch('http://localhost:5000/api/testimonials'),
-          fetch('http://localhost:5000/api/placed-students')
+          fetch(`${API_BASE_URL}/courses`),
+          fetch(`${API_BASE_URL}/testimonials`),
+          fetch(`${API_BASE_URL}/placed-students`)
         ]);
         if (courseRes.ok) {
           const courseData = await courseRes.json();

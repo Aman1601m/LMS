@@ -36,7 +36,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // File Upload Route
 app.post('/api/upload', upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
-  res.json({ imageUrl: `http://localhost:5000/uploads/${req.file.filename}` });
+  const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+  res.json({ imageUrl: `${baseUrl}/uploads/${req.file.filename}` });
 });
 
 // Basic Route

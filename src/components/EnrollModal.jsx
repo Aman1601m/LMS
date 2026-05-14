@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 import { courses as defaultCourses } from '../data/constants';
+import API_BASE_URL from '../config/api';
 
 export default function EnrollModal({ isModalOpen, setIsModalOpen, showToast }) {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', courseOfInterest: 'MERN Stack Development' });
@@ -10,7 +11,7 @@ export default function EnrollModal({ isModalOpen, setIsModalOpen, showToast }) 
 
   useEffect(() => {
     if (isModalOpen) {
-      fetch('http://localhost:5000/api/courses')
+      fetch(`${API_BASE_URL}/courses`)
         .then(res => res.json())
         .then(data => {
           if (data && data.length > 0) {
@@ -45,7 +46,7 @@ export default function EnrollModal({ isModalOpen, setIsModalOpen, showToast }) 
     
     setIsSubmitting(true);
     try {
-      const res = await fetch('http://localhost:5000/api/leads', {
+      const res = await fetch(`${API_BASE_URL}/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
